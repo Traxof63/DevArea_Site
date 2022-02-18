@@ -1,115 +1,30 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {CookieService} from 'ngx-cookie-service';
+import { MemberService } from './services/member.service';
+import { MemberInfos } from './models/member-infos';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
-  public connected = "not_connected";
+  memberInfos: MemberInfos | undefined;
+  connected: any;
 
-  public is_connected = false;
-
-
-  member_infos = {
-    isMember: true,
-    id: '0',
-    urlAvatar: '/assets/images/reseaux/discord.png',
-    name: 'Disconnected',
-    tag: 'Disconnected#0000',
-    rank: 0,
-    xp: 42,
-    previous_xp_level: 0,
-    next_xp_level: 0,
-    level: 0,
-    missions_list: [
-      {
-        title: "title",
-        description: "description..",
-        prix: "price",
-        date_retour: "date de retour",
-        langage: "langage utilisé",
-        support: "le support utlisé",
-        niveau: "le niveau requis",
-        member_name: "pseudo du membre",
-        avatar: "https://www.magimix.com/webroot-mobile/img/loading.gif",
-        member_tag: "le tag du membre",
-        message_id: "0"
-      }
-    ],
-    badges: [
-      {
-        description: "description",
-        name: "Nom du badge",
-        url_icon: "https://www.magimix.com/webroot-mobile/img/loading.gif"
-      }
-    ]
+  constructor(private _memberService: MemberService) {
   }
 
-  constructor(private cookieService: CookieService, private httpClient: HttpClient) {
-    this.takeInfos();
-  }
 
-  takeInfos() {
-    if (this.cookieService.get('codeDiscord')) {
-      this.httpClient
-        .get<any>('/data/auth/get?code=' + this.cookieService.get('codeDiscord'))
-        .subscribe(
-          (response) => {
-            if (response == null) {
-              this.cookieService.delete('codeDiscord');
-              this.connected = "not_connected";
-            } else {
-              this.member_infos = response;
-              this.connected = "connected";
-            }
-          },
-          (error) => {
-            console.log('Error : ', error);
-          }
-        );
-    } else
-      this.connected = "not_connected";
-  }
+  ngOnInit(): void {
+    this._memberService.memberInfos$.subscribe({
+      next: (memberInfos) => this.memberInfos = memberInfos
+    })
 
-  reset(): void {
-    this.member_infos = {
-      isMember: true,
-      id: '0',
-      urlAvatar: '/assets/images/reseaux/discord.png',
-      name: 'Disconnected',
-      tag: 'Disconnected#0000',
-      rank: 0,
-      xp: 42,
-      previous_xp_level: 0,
-      next_xp_level: 0,
-      level: 0,
-      missions_list: [
-        {
-          title: "title",
-          description: "description..",
-          prix: "price",
-          date_retour: "date de retour",
-          langage: "langage utilisé",
-          support: "le support utlisé",
-          niveau: "le niveau requis",
-          member_name: "pseudo du membre",
-          avatar: "https://www.magimix.com/webroot-mobile/img/loading.gif",
-          member_tag: "le tag du membre",
-          message_id: "0"
-        }
-      ],
-      badges: [
-        {
-          description: "description",
-          name: "Nom du badge",
-          url_icon: "https://www.magimix.com/webroot-mobile/img/loading.gif"
-        }
-      ]
-    }
-    this.takeInfos();
+    this._memberService.connected$.subscribe({
+      next: (connected) => this.connected = connected
+    })
   }
 }

@@ -1,23 +1,8 @@
-.informations {
-  background-color: gray; //#606060
-  display: block;
-  height: auto;
-  max-width: 80%;
-  width: auto;
-  margin-top: 20px;
-  margin-left: max(250px, 20%);
-  margin-right: 20%;
-  border-radius: 20px;
-  padding-bottom: 25px;
-  margin-bottom: 200px;
-}
 
 img {
-  width: 100px;
-  height: auto;
+  height: 40px;
   vertical-align: middle;
-  border-top-left-radius: 20px;
-
+  border-radius: 8px;
 }
 
 a {
@@ -36,6 +21,17 @@ h2 {
   padding: 0px;
   text-align: justify;
   font-size: 20px;
+}
+
+h1 {
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  color: white;
+  font-weight: 400;
+  font-size: 24px;
+  text-align: center;
+  height: 60px;
+  line-height: 60px;
 }
 
 h3 {

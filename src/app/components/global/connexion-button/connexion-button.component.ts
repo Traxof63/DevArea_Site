@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {AppComponent} from "../../../app.component";
 import {CookieService} from "ngx-cookie-service";
+import { MemberService } from 'src/app/services/member.service';
 
 @Component({
   selector: 'app-connexion-button',
@@ -15,7 +16,7 @@ export class ConnexionButtonComponent implements OnInit {
 
   public visibility_menu = "hidden";
 
-  constructor(private component: AppComponent, private cookieService: CookieService) {
+  constructor(private _memberService: MemberService, private _cookieService: CookieService) {
   }
 
   ngOnInit(): void {
@@ -30,12 +31,15 @@ export class ConnexionButtonComponent implements OnInit {
   }
 
   connection() {
-    window.location.href = 'https://discord.com/api/oauth2/authorize?client_id=579257697048985601&redirect_uri=https%3A%2F%2Fdevarea.fr%2Fdata%2Fauth&response_type=code&scope=identify';
+    const redirect_uri = `${window.location.protocol}//${window.location.host}`;
+    const encoded_redirect_uri = encodeURIComponent(redirect_uri);
+
+    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=579257697048985601&redirect_uri=${encoded_redirect_uri}%2Fdata%2Fauth&response_type=code&scope=identify`;
   }
 
   disconnection() {
-    this.cookieService.delete('codeDiscord');
-    this.component.reset();
+    this._cookieService.delete('codeDiscord');
+    this._memberService.reset();
   }
 
 

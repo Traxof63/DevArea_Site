@@ -26,6 +26,8 @@ import { OptionsComponent } from './components/pages/options/options.component';
 import { PersonnalXpComponent } from './components/pages/options/components/personnal-xp/personnal-xp.component';
 import { BadgesCardComponent } from './components/pages/options/components/badges-card/badges-card.component';
 import { BadgeComponent } from './components/pages/options/components/badge/badge.component';
+import { SideNavComponent } from './components/global/side-nav/side-nav.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const appRoutes: Routes = [
   {path: 'menu', component: MenuComponent},
@@ -43,6 +45,7 @@ const appRoutes: Routes = [
     AppComponent,
     FilInfoComponent,
     HeaderComponent,
+    SideNavComponent,
     DescriptionComponent,
     CommandsAvailableComponent,
     MenuComponent,
@@ -65,6 +68,7 @@ const appRoutes: Routes = [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
+    FlexLayoutModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [

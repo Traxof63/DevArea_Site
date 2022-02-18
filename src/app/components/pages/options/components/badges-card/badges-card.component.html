@@ -2,7 +2,7 @@
   <h2>Vos badges:</h2>
   <app-badge
     id="badge"
-    *ngFor="let badge of component.member_infos.badges; let i= index"
+    *ngFor="let badge of memberInfos?.badges; let i= index"
     [description]="badge.description"
     [name]="badge.name"
     [url_icon]="badge.url_icon"

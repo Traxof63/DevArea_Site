@@ -3,6 +3,9 @@ import {AppComponent} from "../../../app.component";
 import {HttpClient} from "@angular/common/http";
 import {CookieService} from "ngx-cookie-service";
 import {Router} from "@angular/router";
+import { MemberService } from 'src/app/services/member.service';
+import { lastValueFrom } from 'rxjs';
+import { MemberInfos } from 'src/app/models/member-infos';
 
 async function delay(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -16,13 +19,17 @@ async function delay(ms: number) {
 export class OptionsComponent implements OnInit {
 
   public own_missions = "true";
+  memberInfos: MemberInfos | undefined;
 
-  constructor(public component: AppComponent, private http_client: HttpClient, private cookie: CookieService, private router: Router,) {
+  constructor(private _memberService: MemberService, private _httpClient: HttpClient, private _cookie: CookieService, private _router: Router,) {
   }
 
-  ngOnInit(): void {
-    if (this.component.connected == "not_connected")
-      this.router.navigate(['/', 'menu'])
+  async ngOnInit() {
+    if (await lastValueFrom(this._memberService.connected$) == "not_connected"){
+      this._router.navigate(['/', 'menu'])
+    }
+
+    this.memberInfos =  await lastValueFrom(this._memberService.memberInfos$);
   }
 
 
@@ -31,11 +38,11 @@ export class OptionsComponent implements OnInit {
 
   newMission(): void {
     if (!this.is_sending)
-      if (this.cookie.get("codeDiscord")) {
+      if (this._cookie.get("codeDiscord")) {
         this.is_sending = true;
         this.text_button_create = "Envois..";
-        this.http_client
-          .get<string[]>("/data/global/send_message_by_discord/?message_id=" + "455" + "&code=" + this.cookie.get("codeDiscord"))
+        this._httpClient
+          .get<string[]>("/data/global/send_message_by_discord/?message_id=" + "455" + "&code=" + this._cookie.get("codeDiscord"))
           .subscribe(
             (response) => {
               if (response[0] == "send")

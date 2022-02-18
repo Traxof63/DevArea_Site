@@ -1,7 +1,16 @@
-<site-header></site-header>
+<!-- <site-header></site-header>
 <app-connexion-button
   [sourceImage]="member_infos.urlAvatar"
   [name]="member_infos.name"
   [style_on_connection_change]="connected"
 ></app-connexion-button>
-<router-outlet></router-outlet>
+<router-outlet></router-outlet> -->
+<div fxFlex fxLayout="row" class="content">
+  <app-side-nav></app-side-nav>
+  <div fxFlex fxLayout="column" class="outletContainer">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<app-connexion-button *ngIf="memberInfos" [sourceImage]="memberInfos.urlAvatar" [name]="memberInfos.name"
+[style_on_connection_change]="connected"></app-connexion-button>

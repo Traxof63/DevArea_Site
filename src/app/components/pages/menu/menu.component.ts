@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {CookieService} from 'ngx-cookie-service';
+import { MemberService } from 'src/app/services/member.service';
 import {AppComponent} from "../../../app.component";
 
 @Component({
@@ -16,14 +17,14 @@ export class MenuComponent implements OnInit {
 
   }
 
-  constructor(private router: Router, private cookieService: CookieService, private component: AppComponent) {
+  constructor(private _router: Router, private _cookieService: CookieService, private _memberService: MemberService) {
   }
 
   ngOnInit(): void {
-    if (this.router.url.startsWith('/?code=')) {
-      this.cookieService.set('codeDiscord', this.router.url.substr(7, this.router.url.length - 7));
-      this.component.takeInfos();
-      this.router.navigate([], {
+    if (this._router.url.startsWith('/?code=')) {
+      this._cookieService.set('codeDiscord', this._router.url.substr(7, this._router.url.length - 7));
+      this._memberService.loadInfos();
+      this._router.navigate([], {
         queryParams: {
           'code': null
         },

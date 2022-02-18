@@ -1,5 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {AppComponent} from "../../../../../app.component";
+import { Component, OnInit } from '@angular/core';
+import { MemberInfos } from 'src/app/models/member-infos';
+import { MemberService } from 'src/app/services/member.service';
 
 @Component({
   selector: 'app-badges-card',
@@ -8,10 +9,15 @@ import {AppComponent} from "../../../../../app.component";
 })
 export class BadgesCardComponent implements OnInit {
 
-  constructor(public component: AppComponent) {
+  memberInfos: MemberInfos | undefined;
+
+  constructor(private _memberService: MemberService) {
   }
 
   ngOnInit(): void {
+    this._memberService.memberInfos$.subscribe({
+      next: (memberInfos) => this.memberInfos = memberInfos
+    })
   }
 
 }
