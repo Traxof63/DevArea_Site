@@ -1,8 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {AppComponent} from "../../../app.component";
-import {HttpClient} from "@angular/common/http";
-import {CookieService} from "ngx-cookie-service";
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { AppComponent } from "../../../app.component";
+import { HttpClient } from "@angular/common/http";
+import { CookieService } from "ngx-cookie-service";
+import { Router } from "@angular/router";
 import { MemberService } from 'src/app/services/member.service';
 import { lastValueFrom } from 'rxjs';
 import { MemberInfos } from 'src/app/models/member-infos';
@@ -24,12 +24,19 @@ export class OptionsComponent implements OnInit {
   constructor(private _memberService: MemberService, private _httpClient: HttpClient, private _cookie: CookieService, private _router: Router,) {
   }
 
-  async ngOnInit() {
-    if (await lastValueFrom(this._memberService.connected$) == "not_connected"){
-      this._router.navigate(['/', 'menu'])
-    }
+  ngOnInit() {
 
-    this.memberInfos =  await lastValueFrom(this._memberService.memberInfos$);
+    this._memberService.connected$.subscribe({
+      next: (connected) => {
+        if (connected == "not_connected") {
+          this._router.navigate(['/', 'menu'])
+        }
+      }
+    }); 
+
+    this._memberService.memberInfos$.subscribe({
+      next: (memberInfos) => this.memberInfos = memberInfos
+    }); 
   }
 
 
